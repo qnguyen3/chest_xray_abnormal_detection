@@ -135,17 +135,17 @@ if __name__ == "__main__":
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
     #data loaders
-    train_loader = DataLoader(dataset=train_data, batch_size = 32, shuffle=True)
+    train_loader = DataLoader(dataset=train_data, batch_size = 512, shuffle=True)
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
-    test_loader = DataLoader(dataset=test_data, batch_size = 16)
+    test_loader = DataLoader(dataset=test_data, batch_size = 32)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=16, num_class=1, d_model=256,n_head=8,n_layers=2,d_mlp=128)
+    vision_transformer = ViT(img_size=224, patch_size=16, num_class=1, d_model=256,n_head=8,n_layers=4,d_mlp=128)
     #configs
     epochs = 50
     criterion = nn.BCELoss()
     criterion.to(device)
-    optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
-    scheduler = StepLR(optimizer, step_size=7, gamma=0.0001)
+    optimizer = optim.Adam(vision_transformer.parameters(), lr=0.003)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.0001)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
         criterion=criterion, optimizer=optimizer, scheduler=scheduler, epochs=epochs)
