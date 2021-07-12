@@ -69,6 +69,7 @@ def test(model, test_loader, criterion):
     print(f"test-loss : {test_loss:.4f} - test-acc: {test_accuracy:.4f}\n")
 
 def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, epochs: int = 100):
+    best_val = 100
     model.to(device)
     for epoch in range(epochs):
         epoch_loss = 0
@@ -119,6 +120,9 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f}\n"
                 )
+            if best_val > epoch_val_loss:
+                torch.save(model, 'best-mode.pt')
+                best_val = epoch_val_loss
         else:
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f}\n"
