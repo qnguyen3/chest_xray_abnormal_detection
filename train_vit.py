@@ -131,7 +131,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
 
 if __name__ == "__main__":
     #read in data
-    default_data_path = "Y:\Work\chest_xray_proj\chest_xray_data"
+    default_data_path = "./chest_xray"
     train_data = read_data(default_data_path, 'train')
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
