@@ -1,4 +1,4 @@
-from ViT_PyTorch.module.Layers import *
+from module.Layers import *
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
