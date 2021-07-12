@@ -123,6 +123,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             if best_val > epoch_val_loss:
                 torch.save(model, 'best-mode.pt')
                 best_val = epoch_val_loss
+                print('saved best')
         else:
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f}\n"
