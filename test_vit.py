@@ -46,7 +46,7 @@ if __name__ == "__main__":
     test_data = read_data(default_data_path, 'test')
     test_loader = DataLoader(dataset=test_data, batch_size = 16)
 
-    model = torch.load('best-mode.pt')
+    model = torch.load('best-model.pt')
     criterion = nn.BCELoss()
     criterion.to(device)
 

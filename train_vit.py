@@ -89,7 +89,6 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             #Optimizing
             loss.backward()
             optimizer.step()
-            # scheduler.step()
             #Calculate Accuracy
             pred = torch.round(output.detach().cpu())
             target = torch.round(label.detach().cpu())
@@ -117,6 +116,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
                     val_acc = (pred == target).sum().float()
                     epoch_val_accuracy += (val_acc/val_output_size)/len(valid_loader)
                     epoch_val_loss += val_loss/len(valid_loader)
+        scheduler.step()
         if valid_loader is not None:
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f}\n"
@@ -129,6 +129,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f}\n"
                 )
+    torch.save('last-model.pt')
 
 if __name__ == "__main__":
     #read in data
@@ -141,13 +142,13 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 16)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=8,n_layers=4,d_mlp=512)
+    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=512,n_head=8,n_layers=8,d_mlp=512)
     #configs
-    epochs = 20
+    epochs = 50
     criterion = nn.BCELoss()
     criterion.to(device)
     optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
-    scheduler = StepLR(optimizer, step_size=1, gamma=0.7)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
         criterion=criterion, optimizer=optimizer, scheduler=scheduler, epochs=epochs)
