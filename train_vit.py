@@ -45,6 +45,7 @@ def read_data(path = ".\chest_xray_data", mode = 'train'):
         dataset_obj = ChestXRayDataSet(data_path, transform_test)
         dataset = dataset_obj()
     return dataset
+
 def test(model, test_loader, criterion):
     model.to(device)
     test_accuracy = 0
@@ -65,9 +66,7 @@ def test(model, test_loader, criterion):
         test_accuracy += (acc / output_size) / len(test_loader)
         test_loss += test_loss / len(test_loader)
 
-        print(
-                f"test-loss : {test_loss:.4f} - test-acc: {test_accuracy:.4f}\n"
-                )
+    print(f"test-loss : {test_loss:.4f} - test-acc: {test_accuracy:.4f}\n")
 
 def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, epochs: int = 100):
     model.to(device)
@@ -89,7 +88,6 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             #Optimizing
             loss.backward()
             optimizer.step()
-            scheduler.step()
             #Calculate Accuracy
             pred = np.round(output.detach().cpu())
             target = np.round(label.detach().cpu())
