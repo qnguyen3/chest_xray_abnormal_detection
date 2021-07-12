@@ -89,6 +89,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             #Optimizing
             loss.backward()
             optimizer.step()
+            scheduler.step()
             #Calculate Accuracy
             pred = torch.round(output.detach().cpu())
             target = torch.round(label.detach().cpu())
@@ -123,7 +124,6 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             if best_val > epoch_val_loss:
                 torch.save(model, 'best-mode.pt')
                 best_val = epoch_val_loss
-                print('saved best')
         else:
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f}\n"
@@ -136,17 +136,17 @@ if __name__ == "__main__":
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
     #data loaders
-    train_loader = DataLoader(dataset=train_data, batch_size = 256, shuffle=True)
+    train_loader = DataLoader(dataset=train_data, batch_size = 32, shuffle=True)
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
-    test_loader = DataLoader(dataset=test_data, batch_size = 32)
+    test_loader = DataLoader(dataset=test_data, batch_size = 16)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=4,n_layers=4,d_mlp=128)
+    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=8,n_layers=4,d_mlp=256)
     #configs
-    epochs = 50
+    epochs = 20
     criterion = nn.BCELoss()
     criterion.to(device)
     optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.7)
+    scheduler = StepLR(optimizer, step_size=1, gamma=0.7)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
         criterion=criterion, optimizer=optimizer, scheduler=scheduler, epochs=epochs)
