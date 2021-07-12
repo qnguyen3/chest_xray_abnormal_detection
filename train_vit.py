@@ -45,6 +45,29 @@ def read_data(path = ".\chest_xray_data", mode = 'train'):
         dataset_obj = ChestXRayDataSet(data_path, transform_test)
         dataset = dataset_obj()
     return dataset
+def test(model, test_loader, criterion):
+    model.to(device)
+    test_accuracy = 0
+    test_loss = 0
+    for data, label in tqdm(test_loader):
+        model.eval()
+        data = data.to(device)
+        label = label.float().to(device)
+        output = model(data)
+        output = output.float()
+        output_size = output.size(0)
+        output = output.float().reshape((output_size))
+        test_loss = criterion(output, label)
+
+        pred = np.round(output.detach().cpu())
+        target = np.round(label.detach().cpu())
+        acc = (pred == target).sum().float()
+        test_accuracy += (acc / output_size) / len(test_loader)
+        test_loss += test_loss / len(test_loader)
+
+        print(
+                f"test-loss : {test_loss:.4f} - test-acc: {test_accuracy:.4f}\n"
+                )
 
 def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, epochs: int = 100):
     model.to(device)
@@ -66,6 +89,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             #Optimizing
             loss.backward()
             optimizer.step()
+            scheduler.step()
             #Calculate Accuracy
             pred = np.round(output.detach().cpu())
             target = np.round(label.detach().cpu())
@@ -109,17 +133,18 @@ if __name__ == "__main__":
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
     #data loaders
-    train_loader = DataLoader(dataset=train_data, batch_size = 64, shuffle=True)
+    train_loader = DataLoader(dataset=train_data, batch_size = 32, shuffle=True)
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 16)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=196,n_head=4,n_layers=2,d_mlp=256)
+    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=8,n_layers=2,d_mlp=128)
     #configs
-    epochs = 20
+    epochs = 1
     criterion = nn.BCELoss()
     optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
     scheduler = StepLR(optimizer, step_size=7, gamma=0.0001)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
         criterion=criterion, optimizer=optimizer, scheduler=scheduler, epochs=epochs)
+    test(vision_transformer, test_loader, criterion)
     
