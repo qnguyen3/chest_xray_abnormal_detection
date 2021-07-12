@@ -147,7 +147,7 @@ if __name__ == "__main__":
     epochs = 100
     criterion = nn.BCELoss()
     criterion.to(device)
-    optimizer = optim.AdamW(vision_transformer.parameters(), lr=3e-5)
+    optimizer = optim.AdamW(vision_transformer.parameters())
     scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
