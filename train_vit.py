@@ -33,7 +33,7 @@ transform_test = transforms.Compose([
     transforms.ToTensor(),
     ])
 
-def read_data(path = ".\chest_xray_data", mode = 'train'):
+def read_data(path = ".\chest_xray", mode = 'train'):
     data_path = os.path.join(path,mode)
     if mode == 'train':
         dataset_obj = ChestXRayDataSet(data_path, transform_train)
