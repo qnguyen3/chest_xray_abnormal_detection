@@ -136,7 +136,7 @@ if __name__ == "__main__":
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
     #data loaders
-    train_loader = DataLoader(dataset=train_data, batch_size = 128, shuffle=True)
+    train_loader = DataLoader(dataset=train_data, batch_size = 256, shuffle=True)
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 32)
     #define model
