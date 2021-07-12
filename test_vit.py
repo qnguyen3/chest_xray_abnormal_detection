@@ -14,7 +14,7 @@ from train_vit import read_data
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 transform_test = transforms.Compose([
-    transforms.RandomResizedCrop(224), 
+    transforms.RandomResizedCrop(256), 
     transforms.ToTensor(),
     ])
 
