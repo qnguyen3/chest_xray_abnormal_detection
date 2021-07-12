@@ -129,7 +129,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f}\n"
                 )
-    torch.save('last-model.pt')
+    torch.save(model,'last-model.pt')
 
 if __name__ == "__main__":
     #read in data
