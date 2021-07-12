@@ -140,7 +140,7 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 32)
     #define model
-    vision_transformer = ViT(img_size=192, patch_size=8, num_class=1, d_model=64,n_head=4,n_layers=4,d_mlp=128)
+    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=128,n_head=4,n_layers=4,d_mlp=128)
     #configs
     epochs = 50
     criterion = nn.BCELoss()
