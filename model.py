@@ -1,4 +1,4 @@
-from module.Layers import *
+from ViT_PyTorch.module.Layers import *
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -53,6 +53,7 @@ class ViT(nn.Module):
         x = x.mean(dim = 1) if self.pool == 'mean' else x[:, 0]
         #MLP Head
         x = self.mlp_head(x)
+        x = torch.sigmoid(x)
         return x
 
 # Transformer

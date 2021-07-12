@@ -60,8 +60,8 @@ def test(model, test_loader, criterion):
         output = output.float().reshape((output_size))
         test_loss = criterion(output, label)
 
-        pred = np.round(output.detach().cpu())
-        target = np.round(label.detach().cpu())
+        pred = torch.round(output.detach().cpu())
+        target = torch.round(label.detach().cpu())
         acc = (pred == target).sum().float()
         test_accuracy += (acc / output_size) / len(test_loader)
         test_loss += test_loss / len(test_loader)
@@ -90,8 +90,8 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
             loss.backward()
             optimizer.step()
             #Calculate Accuracy
-            pred = np.round(output.detach().cpu())
-            target = np.round(label.detach().cpu())
+            pred = torch.round(output.detach().cpu())
+            target = torch.round(label.detach().cpu())
             acc = (pred == target).sum().float()
             epoch_accuracy += (acc / output_size) / len(train_loader)
             epoch_loss += loss / len(train_loader)
@@ -110,10 +110,10 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
                     
                     val_loss = criterion(val_output, label)
                     #Calculate Validation Accuracy
-                    pred = np.round(val_output.detach().cpu())
-                    target = np.round(label.detach().cpu())
+                    pred = torch.round(val_output.detach().cpu())
+                    target = torch.round(label.detach().cpu())
 
-                    val_acc = (pred == target).sum().float().mean()
+                    val_acc = (pred == target).sum().float()
                     epoch_val_accuracy += (val_acc/val_output_size)/len(valid_loader)
                     epoch_val_loss += val_loss/len(valid_loader)
         if valid_loader is not None:
@@ -130,7 +130,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
 
 if __name__ == "__main__":
     #read in data
-    default_data_path = "./chest_xray"
+    default_data_path = "Y:\Work\chest_xray_proj\chest_xray_data"
     train_data = read_data(default_data_path, 'train')
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
@@ -143,6 +143,7 @@ if __name__ == "__main__":
     #configs
     epochs = 50
     criterion = nn.BCELoss()
+    criterion.to(device)
     optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
     scheduler = StepLR(optimizer, step_size=7, gamma=0.0001)
     #train
