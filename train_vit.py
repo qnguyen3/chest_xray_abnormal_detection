@@ -131,7 +131,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
 
 if __name__ == "__main__":
     #read in data
-    default_data_path = "./chest_xray"
+    default_data_path = "Y:\Work\chest_xray_proj\chest_xray_data"
     train_data = read_data(default_data_path, 'train')
     val_data = read_data(default_data_path, 'val')
     test_data = read_data(default_data_path, 'test')
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 16)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=8,n_layers=4,d_mlp=256)
+    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=256,n_head=4,n_layers=4,d_mlp=256)
     #configs
     epochs = 20
     criterion = nn.BCELoss()
