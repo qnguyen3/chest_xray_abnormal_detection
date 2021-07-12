@@ -18,18 +18,18 @@ seed = 3
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 transform_train = transforms.Compose([
-    transforms.RandomResizedCrop(256),
+    transforms.RandomResizedCrop(224),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor()
     ])
 
 transform_val = transforms.Compose([
-    transforms.RandomResizedCrop(256),
+    transforms.RandomResizedCrop(224),
     transforms.ToTensor()
     ])
 
 transform_test = transforms.Compose([
-    transforms.RandomResizedCrop(256), 
+    transforms.RandomResizedCrop(224), 
     transforms.ToTensor(),
     ])
 
