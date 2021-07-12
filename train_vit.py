@@ -116,7 +116,7 @@ def train(model, train_loader, valid_loader, criterion, optimizer, scheduler, ep
                     val_acc = (pred == target).sum().float()
                     epoch_val_accuracy += (val_acc/val_output_size)/len(valid_loader)
                     epoch_val_loss += val_loss/len(valid_loader)
-        scheduler.step()
+        # scheduler.step()
         if valid_loader is not None:
             print(
                 f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_accuracy:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f}\n"
@@ -142,12 +142,12 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_data, batch_size = 8, shuffle=True)
     test_loader = DataLoader(dataset=test_data, batch_size = 16)
     #define model
-    vision_transformer = ViT(img_size=224, patch_size=8, num_class=1, d_model=512,n_head=8,n_layers=6,d_mlp=512)
+    vision_transformer = ViT(img_size=224, patch_size=16, num_class=1, d_model=512,n_head=8,n_layers=6,d_mlp=512)
     #configs
     epochs = 50
     criterion = nn.BCELoss()
     criterion.to(device)
-    optimizer = optim.Adam(vision_transformer.parameters(), lr=0.001)
+    optimizer = optim.Adam(vision_transformer.parameters(), lr=3e-5)
     scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     #train
     train(model=vision_transformer, train_loader=train_loader, valid_loader=val_loader, 
